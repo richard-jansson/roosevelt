@@ -1,6 +1,14 @@
-ufo, quad, row, sym {
+ufo, quad, sym {
 	display: block;
 	float: left;
+}
+
+quad {
+	border: 1px solid #aaa;
+}
+
+sym {
+	text-align: center;
 }
 
 ufo {
@@ -8,11 +16,6 @@ ufo {
 	font-family: monospace;
 	/* 100% of ufowrap div */
 	width: 100%;
-}
-
-/* clear makes the rows stack on top of each other */
-row { 
-	clear: both;
 }
 
 sym {
