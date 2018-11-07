@@ -81,6 +81,8 @@ function renderufo(e,set,ncol){
 
 		var rn=0;
 		var sw=100/ncol;
+		if(quad.length<ncol) sw=100/quad.length;
+
 		for(var k in quad){
 				var sym=quad[k];
 				var se=$("<sym></sym>",{style:"width:"+sw+"%"});
