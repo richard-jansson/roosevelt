@@ -11,41 +11,61 @@ function hide(e){
 //	e.toggle();
 	// FIXME makes faulty assumption that there's a wrapper parent element
 	e.parent().toggle();
+
+	if(e.hidden == undefined || !e.hidden) e.hidden=true;
+	else e.hidden=false;
 }
 
 function output(msg){
 	for(var i in sinks){
 		var tname=sinks[i][0].tagName;
-		if(tname == "textare" || tname == "INPUT"){
-			sinks[i].val(sinks[i].val()+msg);
+		if(tname == "TEXTAREA" || tname == "INPUT"){
+//			sinks[i].val(sinks[i].val()+msg);
+			textareainsert(sinks[i][0], msg);
 		}else{
 			sinks[i].html(sinks[i].html()+msg);
 		}
 	}
+
+	// FIXME proper on change hook
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub])
 }
 
+function keydown(e){
+	e.stopImmediatePropagation();
+}
 // global key up
 function keyup(e){
+	e.stopImmediatePropagation();
+	var propagate=true;
 	for(var i in ufos){
 		var ufo=ufos[i];
+
+		if(e.key==ufo.hide){
+			hide(ufo);
+			propagate=false;
+		}
+
+		if(ufo.hidden===true) continue;
 
 		if(typeof(ufo.bindings[e.key])!="undefined"){
 			var quadn=ufo.bindings[e.key];
 
 			select(ufo,quadn);
+			propagate=false;
 		}
 
-		if(e.key==ufo.rst) reset(ufo)
-		if(e.key==ufo.hide) hide(ufo);
+		if(e.key==ufo.rst){
+			reset(ufo)
+			propagate=false;
+		}
 	}
 
+	return propagate;
 }
 
 // select quad n on ufo enabled element e
 function select(e,n){
-	console.log("select quad: "+n +" on ");
-	console.log(e);
-
 	if(e.set==undefined) e.set=e.original_alphabet;
 	
 	// if symbol print it out
@@ -58,9 +78,11 @@ function select(e,n){
 		if(e.set[n].length!=undefined){
 			e.set=e.set[n];
 			renderufo(e,e.set,e.num_columns);
-		}
-		else{
-			throw "not supported yet";
+		}else if(e.set[n].c){
+			output(e.set[n].c)
+			reset(e)
+		}else{
+			throw "unsupported symbol";
 		}
 	}
 }
@@ -88,6 +110,9 @@ function renderufo(e,set,ncol){
 				var se=$("<sym></sym>",{style:"width:"+sw+"%"});
 				if(typeof(sym)=="string"){
 					se.html(sym);
+				}else if(typeof(sym)=="object"){
+					if(sym.n==undefined) throw "Must specify name / n, in quad #"+qn;
+					se.html(sym.n);
 				}else{
 					throw "unsupported element in quad #"+qn;
 				}
@@ -104,8 +129,6 @@ function bindufokeys(el,keys,rst,hide){
 
 	for(var k in keys){
 		var key=keys[k];
-		
-//		console.log(k + " "+key);
 
 		el.bindings[key]=k;
 	}
@@ -114,11 +137,33 @@ function bindufokeys(el,keys,rst,hide){
 	el.hide=hide;
 }
 
+function syncmathjax(){
+	var inp="$$"+$("#mathjaxsrc").val()+"$$";
+	var dst=$("#mathjaxdst");
+
+	dst.html(inp);
+
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+}
+
 // called on javascript ready function
 // i.e. when dom is set up and all
 $(document).ready(function(){
-	// bind keypresses globaly 
-	$(document).keyup(keyup);
+	$(document).keypress(function(e){
+		if(!keyup(e)){
+			e.stopPropagation();
+			e.preventDefault();
+		}
+	});
+
+	// shift works differently for some reason??
+	$(document).keyup(function(e){
+		for(var i in ufos){
+			var ufo=ufos[i];
+
+			if(e.key==ufo.rst) reset(ufo)
+		}
+	});
 
 	// find ufo element and render them 
 
