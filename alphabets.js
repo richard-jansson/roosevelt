@@ -1,6 +1,7 @@
 var alphabets=[];
 
 // https://math-demo.abitti.fi/sv
+// https://en.wikipedia.org/wiki/Mathematical_operators_and_symbols_in_Unicode
 
 alphabets["math"] = [
 	// Quad {0,0]
@@ -21,5 +22,20 @@ alphabets["math"] = [
 	"≈","&lt","&gt","≤",
 	"∢","|","‖","→"],
 
-	["∈","ℤ","ℝ"]
+	[
+	"∈","ℤ","ℝ","ℂ",
+	"=","[","]","[]",
+	"|","||","","",
+	"(",")","()","∈"
+	],
+
+	// n - what is displayed 
+	// c - what is inserted
+	[{n:"√",c:'\\sqrt{}'},"^" ],
+
+	[{n:"⏎",c:"\\\\\r\n"}],
+
+	[{n:"∑",c:"\\sum"},{n:"∫",c:"\\int"},{n:"<xs>a</xs><br/><sm>∫</sm><br/><xs>b</xs>",c:"\\int_{a}^{b}"}],
+
+	["→","⇒"]
 ]
