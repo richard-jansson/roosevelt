@@ -1,3 +1,21 @@
+/*
+Copyright (C) 2018  Richard Jansson
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+*/
 var ufos=[];
 var sinks=[];
 
@@ -61,6 +79,10 @@ function keyup(e){
 		}
 	}
 
+	if(!propagate){
+		$("#output").html( $("#output").html()+e.key);
+	}
+
 	return propagate;
 }
 
@@ -87,6 +109,19 @@ function select(e,n){
 	}
 }
 
+function __recurse_render(e,set,ncol){
+	if(set.length != "undefined"){
+		// render quad 
+		for(var k in set){
+
+		}
+	}else {
+	}
+
+	e.insert(ne);
+}
+
+
 // Render / initialize ufo element
 // e - jQuery object representing DOM element
 // s - set i.e.   
@@ -95,6 +130,7 @@ function renderufo(e,set,ncol){
 	e.html("");
 
 	// iterate quads, rows and symbols create DOM element for each and insert into DOM tree
+		var qe=$("<quad></quad>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
 	var qn=0;
 	var w=100/ncol;
 	for(var k in set){
