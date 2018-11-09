@@ -1,11 +1,33 @@
-ufo, quad, sym {
+ufo,quadw,quadp, quad, sym {
 	display: block;
 	float: left;
+}
+
+kl {
+	font-size: 12px;
+	line-height: 16px;
+	position:relative;
+	background-color: #fff;
+	top: 8px;
+	left: 6px;
+}
+
+klm {
+	float: right;
+	font-size: 12px;
+	line-height: 16px;
+	position:relative;
+	background-color: #fff;
+	top: -8px;
+	left: -6px;
+	padding: 0 8px;
+	text-transform: uppercase;
 }
 
 quad {
 	border: 1px solid #aaa;
 	margin-bottom:2%;
+	padding-bottom: 16px;
 }
 
 sym {

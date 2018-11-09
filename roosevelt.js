@@ -135,7 +135,22 @@ function renderufo(e,set,ncol){
 	var w=100/ncol;
 	for(var k in set){
 		var quad=set[k];
+		var qw=$("<quadw></quadw>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
+		var le=$("<kl></kl>");
+		le.html(e.keys[k]);
+		qw.append(le);
+
 		var qe=$("<quad></quad>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
+
+		var qp=$("<quadp></quadp>",{style:"width:100%"});
+		var lem=$("<klm></klm>");
+		lem.html(e.keys[k]);
+		qp.append(lem);
+
+		qw.append(le);
+
+		qe.append(qp);
+
 
 		var rn=0;
 		var sw=100/ncol;
@@ -156,6 +171,8 @@ function renderufo(e,set,ncol){
 		}
 		qn++;
 		e.append(qe);
+//		qw.append(qe);
+//		e.append(qw);
 	}
 }
 
@@ -236,13 +253,6 @@ $(document).ready(function(){
 			$(this).html(e);
 		}
 
-		// save the original alphabet
-		e.original_alphabet=alphabet;
-		e.num_columns=num_columns;
-
-		renderufo($(this),alphabet,num_columns);
-
-
 		// Bind keys seperatly 
 		try {
 			if(typeof(e.attr("bind_select_quad"))=="undefined") 
@@ -264,6 +274,13 @@ $(document).ready(function(){
 		}
 
 		bindufokeys(e,bind_sel_quad,bind_reset,bind_hide)
+
+		// save the original alphabet
+		e.original_alphabet=alphabet;
+		e.num_columns=num_columns;
+		e.keys=bind_sel_quad;
+
+		renderufo(e,alphabet,num_columns);
 
 		// keep track of all the ufos
 		ufos.push(e);
