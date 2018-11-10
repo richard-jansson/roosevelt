@@ -27,12 +27,14 @@ klm {
 quad {
 	border: 1px solid #aaa;
 	margin-bottom:2%;
-	padding-bottom: 16px;
+/*	padding-bottom: 16px; */
 }
 
-sym {
+ufo > quad > quad > sym {
 	text-align: center;
 	font-size: 16px;
+}
+ufo > quad > quad < > sym {
 }
 
 xs {
@@ -43,6 +45,10 @@ ufo {
 	font-family: monospace;
 	/* 100% of ufowrap div */
 	width: 100%;
+}
+
+ufo > quad {
+	min-height: 120px;
 }
 
 xs,sm { font-family: monospace}
@@ -82,4 +88,8 @@ div#divout {
 	border: 1px solid #aaa;
 	margin: 4%;
 	width:84%;
+}
+
+quad.symquad {
+	border: 0;
 }
