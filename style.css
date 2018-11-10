@@ -30,11 +30,9 @@ quad {
 /*	padding-bottom: 16px; */
 }
 
-ufo > quad > quad > sym {
+quad > sym {
 	text-align: center;
 	font-size: 16px;
-}
-ufo > quad > quad < > sym {
 }
 
 xs {
@@ -90,6 +88,6 @@ div#divout {
 	width:84%;
 }
 
-quad.symquad {
+quad > quad{
 	border: 0;
 }

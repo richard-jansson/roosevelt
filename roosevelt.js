@@ -125,10 +125,9 @@ function __recurse_render(e,set,ncol){
 function __set_to_dom(e,set,ncol,lvl){
 	var sw=24;
 	var w = set.length<ncol ? 100 / set.length : 100 / ncol;
-	var m = lvl==0 ? 4 : 0;
 	for(var k in set){
 		var quad=set[k];
-		var qe=$("<quad></quad>",{style:"width:"+(w-5)+"%;margin-right:"+m+"%"});
+		var qe=$("<quad></quad>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
 
 		// Add label for key, on first level  
 		if(!lvl){
@@ -144,7 +143,6 @@ function __set_to_dom(e,set,ncol,lvl){
 		if(typeof(quad)=="object" && quad.length!=undefined){
 			var ne=__set_to_dom(qe,quad,ncol,lvl+1);
 		}else if(typeof(quad)=="object"){
-			qe.addClass("symquad");
 		// Leaf with object 
 			var se=$("<sym></sym>");
 			// FIXME can we get location of quad 
@@ -153,7 +151,6 @@ function __set_to_dom(e,set,ncol,lvl){
 
 			qe.append(se);
 		}else{
-			qe.addClass("symquad");
 			// leaf that is string only 
 			var se=$("<sym></sym>",{style:"width:"+sw+"%"});
 			se.html(quad);
@@ -175,6 +172,54 @@ function renderufo(e,set,ncol){
 	var dom=__set_to_dom(e,set,ncol,0);
 
 	e.append(dom);
+	return;
+	
+
+	// iterate quads, rows and symbols create DOM element for each and insert into DOM tree
+	var qe=$("<quad></quad>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
+	var qn=0;
+	var w=100/ncol;
+	for(var k in set){
+		var quad=set[k];
+		var qw=$("<quadw></quadw>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
+		var le=$("<kl></kl>");
+		le.html(e.keys[k]);
+		qw.append(le);
+
+		var qe=$("<quad></quad>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
+
+		var qp=$("<quadp></quadp>",{style:"width:100%"});
+		var lem=$("<klm></klm>");
+		lem.html(e.keys[k]);
+		qp.append(lem);
+
+		qw.append(le);
+
+		qe.append(qp);
+
+
+		var rn=0;
+		var sw=100/ncol;
+		if(quad.length<ncol) sw=100/quad.length;
+
+		for(var k in quad){
+				var sym=quad[k];
+				var se=$("<sym></sym>",{style:"width:"+sw+"%"});
+				if(typeof(sym)=="string"){
+					se.html(sym);
+				}else if(typeof(sym)=="object"){
+					if(sym.n==undefined) throw "Must specify name / n, in quad #"+qn;
+					se.html(sym.n);
+				}else{
+					throw "unsupported element in quad #"+qn;
+				}
+				qe.append(se);
+		}
+		qn++;
+		e.append(qe);
+//		qw.append(qe);
+//		e.append(qw);
+	}
 }
 
 function bindufokeys(el,keys,rst,hide){
