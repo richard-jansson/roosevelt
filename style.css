@@ -35,6 +35,10 @@ quad > sym {
 	font-size: 16px;
 }
 
+sym.long {
+	font-size: 12px;
+}
+
 xs {
 }
 
@@ -46,7 +50,7 @@ ufo {
 }
 
 ufo > quad {
-	min-height: 120px;
+	min-height: 150px;
 }
 
 xs,sm { font-family: monospace}
@@ -62,7 +66,7 @@ sm { font-size: 10px; }
 }
 
 .ufowrap { 
-	min-width: 640px;
+	min-width: 1280px;
 	min-height: 480px;
 	width: 25%;
 	height: 25%;
@@ -90,4 +94,8 @@ div#divout {
 
 quad > quad{
 	border: 0;
+}
+
+quad > sym{
+	min-height: 24px;
 }

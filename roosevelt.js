@@ -147,12 +147,21 @@ function __set_to_dom(e,set,ncol,lvl){
 			var se=$("<sym></sym>");
 			// FIXME can we get location of quad 
 			if(quad.n==undefined) throw "Must specify name";
+			if(quad.n.length>3){
+				se.addClass("long");
+				console.log("long");
+			}
 			se.html(quad.n);
 
 			qe.append(se);
 		}else{
 			// leaf that is string only 
 			var se=$("<sym></sym>",{style:"width:"+sw+"%"});
+			if(typeof(quad)=="undefined") continue;
+			if(quad.length>3){
+				se.addClass("long");
+				console.log("long");
+			}
 			se.html(quad);
 
 			qe.append(se);
@@ -173,53 +182,6 @@ function renderufo(e,set,ncol){
 
 	e.append(dom);
 	return;
-	
-
-	// iterate quads, rows and symbols create DOM element for each and insert into DOM tree
-	var qe=$("<quad></quad>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
-	var qn=0;
-	var w=100/ncol;
-	for(var k in set){
-		var quad=set[k];
-		var qw=$("<quadw></quadw>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
-		var le=$("<kl></kl>");
-		le.html(e.keys[k]);
-		qw.append(le);
-
-		var qe=$("<quad></quad>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
-
-		var qp=$("<quadp></quadp>",{style:"width:100%"});
-		var lem=$("<klm></klm>");
-		lem.html(e.keys[k]);
-		qp.append(lem);
-
-		qw.append(le);
-
-		qe.append(qp);
-
-
-		var rn=0;
-		var sw=100/ncol;
-		if(quad.length<ncol) sw=100/quad.length;
-
-		for(var k in quad){
-				var sym=quad[k];
-				var se=$("<sym></sym>",{style:"width:"+sw+"%"});
-				if(typeof(sym)=="string"){
-					se.html(sym);
-				}else if(typeof(sym)=="object"){
-					if(sym.n==undefined) throw "Must specify name / n, in quad #"+qn;
-					se.html(sym.n);
-				}else{
-					throw "unsupported element in quad #"+qn;
-				}
-				qe.append(se);
-		}
-		qn++;
-		e.append(qe);
-//		qw.append(qe);
-//		e.append(qw);
-	}
 }
 
 function bindufokeys(el,keys,rst,hide){
@@ -276,7 +238,7 @@ $(document).ready(function(){
 
 	$("ufo").each(function(){
 		// check that element is set up properly
-		var alphabet_name,alphabet,num_columns;
+		var alphabet_name,alphabet,num_columns,num_rows;
 		var bind_sel_quad_string;
 		var bind_reset;
 		var bind_hide;
@@ -287,9 +249,16 @@ $(document).ready(function(){
 		// Boring sanity checks for parameters
 		try {
 
+			// rows
+			if(typeof(e.attr("num_rows"))=="undefined") throw "Element has no num_rows attribute";
+			num_rows=e.attr("num_rows");
+			if(parseInt(num_rows)==NaN || parseInt(num_rows)!=parseFloat(num_rows)) throw "num_rows has to be an integer";
+
+			// columns
 			if(typeof(e.attr("num_columns"))=="undefined") throw "Element has no ncolumns attribute";
 			num_columns=e.attr("num_columns");
 			if(parseInt(num_columns)==NaN || parseInt(num_columns)!=parseFloat(num_columns)) throw "num_columns has to be an integer";
+
 			if(typeof(e.attr("alphabet"))=="undefined") throw "Element has no alphabet attribute";
 			alphabet_name =e.attr("alphabet");
 			if(typeof(alphabets[alphabet_name])=="undefined") throw "Undefined alphabet "+alphabet_name+", specify in alphabet.js";
@@ -320,13 +289,15 @@ $(document).ready(function(){
 		}
 
 		bindufokeys(e,bind_sel_quad,bind_reset,bind_hide)
+	
+		tree=maketree(alphabet,num_rows,num_columns);
 
 		// save the original alphabet
-		e.original_alphabet=alphabet;
+		e.original_alphabet=tree;
 		e.num_columns=num_columns;
 		e.keys=bind_sel_quad;
 
-		renderufo(e,alphabet,num_columns);
+		renderufo(e,tree,num_columns);
 
 		// keep track of all the ufos
 		ufos.push(e);

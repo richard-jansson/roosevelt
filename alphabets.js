@@ -21,64 +21,135 @@ var alphabets=[];
 // https://math-demo.abitti.fi/sv
 // https://en.wikipedia.org/wiki/Mathematical_operators_and_symbols_in_Unicode
 
-alphabets["math"] = [
-	// Quad {0,0]
-	["α","β","γ","Δ",
+alphabets["math"] = 
+
+	["α","β","γ",
+	"x","y","z",
+	"a","b","c",
+	"u","v",
+	"π","λ","ω",
+	"η",
+	"0",",",".",
+	"1","2","3",
+	"4","5", "6",
+	,"7","8","9",
+	"f(x)",
+	"f'(x)",
+	// FIXME how to format?
+	"f\"&nbsp;(x)",
+	"dx",
+	"dy",
+	{n:"dx/dy",c:"\\frac{dx}{dy}"},
+	{n:"∫",c:"\\int"},
+	{n:"<xs>a</xs><br/><sm>∫</sm><br/><xs>b</xs>",c:"\\int_{a}^{b}"},
+	{n:"∑",c:"\\sum"},
+	{n:"<xs>a</xs><br/><sm>∑</sm><br/><xs>b</xs>",c:"\\sum_{a}^{b}"},
+	 "²",
+	"³",
+	"^",
+	"=",
+	"+",
+	"-",
+	// how to differentiate between divisions??
+	"/",
+	{n:"/",c:"\\frac{a}{b}"},
+	"(",
+	")",
+	// How to display in understandable way, add alt??
+	{n:"x<sub>y<sub>",c:"x_{y}",alt:"subscript"},
+	{n:"x<sub>0<sub>",c:"x_{0}",alt:"subscript"},
+	{n:"x<sub>1<sub>",c:"x_{1}",alt:"subscript"},
+	{n:"x<sub>2<sub>",c:"x_{2}",alt:"subscript"},
+	{n:"⏎",c:"\\\\\r\n"},
+	{n:"√",c:'\\sqrt{}'},
+	// FIXME possible to get a better latex rendering, https://tex.stackexchange.com/questions/49043/nice-looking-p-th-roots#49045
+	{n:"n√",c:'\\sqrt[n]{}'},
+	"^" ,
+	"ln(x)",
+	"log(x)",
+	"↔",
+	"↔",
+	 "·","±","∞",
+	 "²",
+	"³",
+	"½","⅓","≠",
+	"≈","&lt","&gt","≤","≧",
+	"∢","|","‖","→",
+	"⇔",
+	"⇒",
+	"⇐",
+	"sin(x)",
+	"cos(x)",
+	"tan(x)",
+	{ n:"sin<sup>-1</sup>(x)",c: "sin^{-1}(x)"},
+	{ n:"cos<sup>-1</sup>(x)",c: "cos^{-1}(x)"},
+	"∈","ℤ","ℝ","ℂ",
+	"P","T","Δ","ρ",
+	"kJ","kg","K","°","l","min","cm",
+	"W","kW","mW","MW",
+	"R","I","U","V","Ω","A",
+
+	"½","⅜",
+	{n:"x",c:"\\vec{x}"}
+	];
+
+alphabets["matho"] = ["α","β","γ","Δ",
 	"x","y","z","a",
 	"b","c","d","e",
 	"π","ρ","δ","μ",
-	],
-	// Quad {1,0}
-	[
 	"0","1","2","3",
 	"4","5","6","7",
-	"8","9",",",".",
-	"+","-","*","/"],
-	// might want to consider to match these utf-8 symbols to latex commands
-	[ "·","±","∞","²",
-	"³","½","⅓","≠",
+	"8","9",
+	",",".",
+	"+","-","*","/",
+	 "·","±","∞",
+	 "²",
+	"³",
+	"½","⅓","≠",
 	"≈","&lt","&gt","≤",
-	"∢","|","‖","→"],
-
-	[
+	"∢","|","‖","→",
+	"f(x)",
+	"f'(x)",
+	"f''(x)",
+	"dx","dy",
+	{n:"dx/dy",c:"\\frac{dx}{dy}"},
 	"∈","ℤ","ℝ","ℂ",
 	"=","[","]","[]",
 	"|","||","","",
-	"(",")","()","∈"
-	],
-
-	// n - what is displayed 
-	// c - what is inserted
-
-	[
-	{n:"∑",c:"\\sum"},{n:"<xs>a</xs><br/><sm>∑</sm><br/><xs>b</xs>",c:"\\sum_{a}^{b}"},
-	{n:"∫",c:"\\int"},{n:"<xs>a</xs><br/><sm>∫</sm><br/><xs>b</xs>",c:"\\int_{a}^{b}"},
-	{n:"∑",c:"\\sum"},{n:"<xs>a</xs><br/><sm>∑</sm><br/><xs>b</xs>",c:"\\sum_{a}^{b}"},
-	{n:"∫",c:"\\int"},{n:"<xs>a</xs><br/><sm>∫</sm><br/><xs>b</xs>",c:"\\int_{a}^{b}"},
-	{n:"sin",c:"\\sin{x}"},{n:"cos",c:"\\cos{x}"},{n:"tan",c:"\\tan{x}"}
-
-	],
-	[{n:"√",c:'\\sqrt{}'},"^" ,"↔",{n:"/",c:"\\frac{a}{b}"}],
-	[{n:"⏎",c:"\\\\\r\n"}],
-
+	"(",")","()","∈",
+	{n:"∑",c:"\\sum"},
+	{n:"<xs>a</xs><br/><sm>∑</sm><br/><xs>b</xs>",c:"\\sum_{a}^{b}"},
+	{n:"∫",c:"\\int"},
+	{n:"<xs>a</xs><br/><sm>∫</sm><br/><xs>b</xs>",c:"\\int_{a}^{b}"},
+	{n:"∑",c:"\\sum"},
+	{n:"<xs>a</xs><br/><sm>∑</sm><br/><xs>b</xs>",c:"\\sum_{a}^{b}"},
+	{n:"∫",c:"\\int"},
+	{n:"<xs>a</xs><br/><sm>∫</sm><br/><xs>b</xs>",c:"\\int_{a}^{b}"},
+	{n:"sin",c:"\\sin{x}"},
+	{n:"cos",c:"\\cos{x}"},
+	{n:"tan",c:"\\tan{x}"},
+	{n:"√",c:'\\sqrt{}'},"^" ,"↔",
+	{n:"/",c:"\\frac{a}{b}"},
+	{n:"⏎",c:"\\\\\r\n"},
 	["→","⇒", "γ","Δ",
 	"x","y","z","a",
 	"b","c","d","e",
 	"π","ρ","δ","μ",
 	],
 // The deep one
-	["α","β","γ","Δ",
+	"α","β","γ","Δ",
 	"x","y","z","a",
 	"b","c","d","e",
-	"π","ρ","δ","μ", ],
-	[
-	["α","β","γ","Δ",
+	"π","ρ","δ","μ", 
+	"α","β","γ","Δ",
 	"x","y","z","a",
 	"b","c","d","e",
-	"π","ρ","δ","μ", ],
-	["α","β","γ","Δ",
+	"π","ρ","δ","μ", 
+	"α","β","γ","Δ",
 	"x","y","z","a",
 	"b","c","d","e",
-	"π","ρ","δ","μ", ]
+	"π","ρ","δ","μ" 
 	]
-]
+
+
+if(typeof(exports)!="undefined") exports.raw = raw;
