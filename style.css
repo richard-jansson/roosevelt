@@ -33,7 +33,7 @@ quad {
 quad > sym {
 	text-align: center;
 	font-size: 16px;
-	whitespace: nowrap;
+	white-space: nowrap;
 }
 
 sym.long {
