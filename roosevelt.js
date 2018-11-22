@@ -125,9 +125,13 @@ function __recurse_render(e,set,ncol){
 function __set_to_dom(e,set,ncol,lvl){
 	var sw=24;
 	var w = set.length<ncol ? 100 / set.length : 100 / ncol;
+	var qmr=parseInt(e.quad_margin_right);
+	console.log(qmr);
 	for(var k in set){
 		var quad=set[k];
-		var qe=$("<quad></quad>",{style:"width:"+(w-5)+"%;margin-right:"+4+"%"});
+		var qe=$("<quad></quad>",{style:"width:"+(w-qmr-1)+"%;margin-right:"+qmr+"%"});
+
+		qe.quad_margin_right=qmr;
 
 		// Add label for key, on first level  
 		if(!lvl){
@@ -156,7 +160,7 @@ function __set_to_dom(e,set,ncol,lvl){
 			qe.append(se);
 		}else{
 			// leaf that is string only 
-			var se=$("<sym></sym>",{style:"width:"+sw+"%"});
+			var se=$("<sym></sym>");
 			if(typeof(quad)=="undefined") continue;
 			if(quad.length>3){
 				se.addClass("long");
@@ -244,11 +248,22 @@ $(document).ready(function(){
 		var bind_hide;
 		var bind_sel_quad;
 		var e=$(this);
+		var quad_margin_right=4;
+
 		// for debugging purposes present object in developer view
 		console.log(e[0]);
+		// styling
+		try {
+			if(typeof(e.attr("quad_margin_right"))!="undefined"){
+				quad_margin_right=e.attr("quad_margin_right");
+				if(parseInt(quad_margin_right)==NaN || parseInt(quad_margin_right)!=parseFloat(quad_margin_right)) throw "quad_margin_right has to be an integer";
+			}
+		} catch (e){
+			$(this).addClass("warn");
+			$(this).html(e);
+		}
 		// Boring sanity checks for parameters
 		try {
-
 			// rows
 			if(typeof(e.attr("num_rows"))=="undefined") throw "Element has no num_rows attribute";
 			num_rows=e.attr("num_rows");
@@ -296,6 +311,7 @@ $(document).ready(function(){
 		e.original_alphabet=tree;
 		e.num_columns=num_columns;
 		e.keys=bind_sel_quad;
+		e.quad_margin_right=quad_margin_right;
 
 		renderufo(e,tree,num_columns);
 
