@@ -39,7 +39,7 @@ alphabets["math"] =
 	"f\"&nbsp;(x)",
 	"dx",
 	"dy",
-	{n:"dx/dy",c:"\\frac{dx}{dy}"},
+	{n:"dx/dy",c:"\\frac{dx}{dy}",m:"<mfrac><mi>a</mi><mi>b</mi></mfrac>"},
 	{n:"∫",c:"\\int"},
 	{n:"<xs>a</xs><br/><sm>∫</sm><br/><xs>b</xs>",c:"\\int_{a}^{b}"},
 	{n:"∑",c:"\\sum"},

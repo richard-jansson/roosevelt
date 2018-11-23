@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 var ufos=[];
 var sinks=[];
-
+var inline=false;
 
 function reset(e){
 	delete e.set;
@@ -32,6 +32,33 @@ function hide(e){
 
 	if(e.hidden == undefined || !e.hidden) e.hidden=true;
 	else e.hidden=false;
+}
+function output_inline(msg,ishtml){
+	console.log("output inline!");	
+// fixme with selection!!
+	if(!ishtml){
+		inline.val(msg);
+	}else{
+		var par=inline.parent();
+		var n=$(msg);
+
+		par.replaceWith(n);
+
+		inline=null;
+/*		par.insertAfter(n);
+		par.remove();
+		*/
+//		par.html(msg);
+//		var math=MathJax.Hub.getAllJax("MathOutput")[0];
+//		MathJax.Hub.Queue("Te
+		var math=$("#divout").find("math");
+		// tex annotation 
+		math.find("annotation").remove();
+		
+		$("#divout").html("<math>"+math.html()+"</math>");
+
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub])
+	}
 }
 
 function output(msg){
@@ -47,6 +74,26 @@ function output(msg){
 
 	// FIXME proper on change hook
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub])
+}
+
+// make class for edit inline??
+function saveinput(){
+	tmp=$(this);
+	var cnt=$(this).val();
+	$(this).parent().html(cnt);
+}
+
+function editinline(e){
+	if(inline) return;
+	if(e.target.childElementCount!=0) return;
+	var el=$(e.target);
+	var cnt=el.html();
+	var inp=$("<input/>",{type:"text",value:cnt,mathml:true});
+	inp.focusout(saveinput);
+	el.html("");
+	el.append(inp);
+
+	inline=inp;
 }
 
 function keydown(e){
@@ -93,15 +140,19 @@ function select(e,n){
 	// if symbol print it out
 	if(typeof(e.set[n])=="string"){
 		console.log("output:" + e.set[n]);			
-		output(e.set[n]);
+		if(inline) output_inline(e.set[n],0);
+		else output(e.set[n]);
 		reset(e);
 	}else if(typeof(e.set[n])=="object"){
 		// array means that it's a quad, update acordingly and render again 
 		if(e.set[n].length!=undefined){
 			e.set=e.set[n];
 			renderufo(e,e.set,e.num_columns);
-		}else if(e.set[n].c){
+		}else if(!inline && e.set[n].c){
 			output(e.set[n].c)
+			reset(e)
+		}else if(inline && e.set[n].m){
+			output_inline(e.set[n].m,1)
 			reset(e)
 		}else{
 			throw "unsupported symbol";
@@ -214,6 +265,7 @@ function syncmathjax(){
 // called on javascript ready function
 // i.e. when dom is set up and all
 $(document).ready(function(){
+	$("#divout").click(editinline);
 	$(document).keypress(function(e){
 		if(!keyup(e)){
 			e.stopPropagation();
