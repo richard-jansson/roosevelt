@@ -20,6 +20,72 @@ var ufos=[];
 var sinks=[];
 var inline=false;
 
+function is_array(o){
+	if(typeof(o)=="object" && o.length!=undefined) return true;
+	return false;
+}
+
+// handle symbol 
+function __sym_to_html(s){
+	var se=$("<sym></sym>");
+
+	if(s.length>3) se.addClass("long");
+	if(s==undefined){
+		se.html(""); 
+		se.addClass("undefined");
+	}
+	else se.html("$$"+s+"$$");
+
+	return se;
+}
+
+function symo(key){
+	if(typeof(key)=="string"){
+		return {label:__sym_to_html(key),output:key};
+	}else if(typeof(key)=="object" && key.c){
+		return {label:__sym_to_html(key.n),output:key.c};
+	}else{
+		throw "Faulty symbol: "+key;
+	}
+}
+
+// Quadrant object 
+function __quad_setlabel(lbl){
+	var qp=$("<quadp></quadp>",{style:"width:100%"});
+	var lem=$("<klm></klm>");
+	lem.html(lbl);
+	qp.append(lem);
+
+	this.el.append(qp);
+}
+
+function __quad_add(e){ this.el.append(e); }
+function __quad_render(){ return this.el; }
+
+function quado(w,qmr){
+	var el=$("<quad></quad>",{style:"width:"+(w-qmr-1)+"%;margin-right:"+qmr+"%"});
+	el.quad_margin_right=qmr;
+
+	return {el: el,
+			label:__quad_setlabel,
+			add:__quad_add,
+			render:__quad_render};
+}
+
+function update(){
+	var divout=$("#divout");
+	var math=divout[0];
+
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub,math])
+}
+
+
+function updatequads(){
+	var sym=$("ufo");
+	var math=sym[0];
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub,math])
+}
+
 function reset(e){
 	delete e.set;
 	renderufo(e,e.original_alphabet,e.num_columns)
@@ -137,93 +203,36 @@ function keyup(e){
 function select(e,n){
 	if(e.set==undefined) e.set=e.original_alphabet;
 	
-	// if symbol print it out
-	if(typeof(e.set[n])=="string"){
-		console.log("output:" + e.set[n]);			
-		if(inline) output_inline(e.set[n],0);
-		else output(e.set[n]);
+	if(is_array(e.set[n])){
+		e.set=e.set[n];
+		renderufo(e,e.set,e.num_columns);
+	}else{
+		var symbol=new symo(e.set[n]);
+		output(symbol.output);
 		reset(e);
-	}else if(typeof(e.set[n])=="object"){
-		// array means that it's a quad, update acordingly and render again 
-		if(e.set[n].length!=undefined){
-			e.set=e.set[n];
-			renderufo(e,e.set,e.num_columns);
-		}else if(!inline && e.set[n].c){
-			output(e.set[n].c)
-			reset(e)
-		}else if(inline && e.set[n].m){
-			output_inline(e.set[n].m,1)
-			reset(e)
-		}else{
-			throw "unsupported symbol";
-		}
 	}
-}
-
-function __recurse_render(e,set,ncol){
-	if(set.length != "undefined"){
-		// render quad 
-		for(var k in set){
-
-		}
-	}else {
-	}
-
-	e.insert(ne);
 }
 
 // Recurse over the current set and return a DOM element to be rendered by web engine 
 function __set_to_dom(e,set,ncol,lvl){
-	var sw=24;
 	var w = set.length<ncol ? 100 / set.length : 100 / ncol;
 	var qmr=parseInt(e.quad_margin_right);
+
 	for(var k in set){
 		var quad=set[k];
-		var qe=$("<quad></quad>",{style:"width:"+(w-qmr-1)+"%;margin-right:"+qmr+"%"});
 
-		qe.quad_margin_right=qmr;
+		var qo=new quado(w,qmr); 
 
 		// Add label for key, on first level  
-		if(!lvl){
-			var qp=$("<quadp></quadp>",{style:"width:100%"});
-			var lem=$("<klm></klm>");
-			lem.html(e.keys[k]);
-			qp.append(lem);
+		if(!lvl) qo.label(e.keys[k]);
 
-			console.log("k"+k+":"+e.keys[k]);
-			qe.append(qp);
-		}
+		var qe=qo.render();
 
 		// non leaf node  
-		if(typeof(quad)=="object" && quad.length!=undefined){
-			var ne=__set_to_dom(qe,quad,ncol,lvl+1);
-		}else if(typeof(quad)=="object"){
-		// Leaf with object 
-			var se=$("<sym></sym>");
-			// FIXME can we get location of quad 
-			if(quad.n==undefined) throw "Must specify name";
-			if(quad.n.length>3){
-				se.addClass("long");
-			}
-			se.html(quad.n);
+		if(is_array(quad)) __set_to_dom(qe,quad,ncol,lvl+1);
+		else qe.append(new symo(quad).label);
 
-			qe.append(se);
-		}else if(quad==undefined){
-			// FIXME throw here?
-			var se=$("<sym></sym>",{class:"undefined"});
-			qe.append(se);
-		}else{
-			// leaf that is string only 
-			var se=$("<sym></sym>");
-			if(typeof(quad)=="undefined") continue;
-			if(quad.length>3){
-				se.addClass("long");
-			}
-			se.html("$$"+quad+"$$");
-
-			qe.append(se);
-		}
-		e.append(qe);
+		e.append(qo.render());
 	}
 	return qe;
 }
@@ -238,7 +247,8 @@ function renderufo(e,set,ncol){
 	var dom=__set_to_dom(e,set,ncol,0);
 
 	e.append(dom);
-	MathJax.Hub.Queue(["Typeset",MathJax.Hub])
+	update();
+	updatequads();
 	return;
 }
 
@@ -268,7 +278,6 @@ function syncmathjax(){
 // called on javascript ready function
 // i.e. when dom is set up and all
 $(document).ready(function(){
-	$("#divout").click(editinline);
 	$(document).keypress(function(e){
 		if(!keyup(e)){
 			e.stopPropagation();
@@ -304,6 +313,7 @@ $(document).ready(function(){
 		var bind_sel_quad;
 		var e=$(this);
 		var quad_margin_right=4;
+		var inline=false;
 
 		// for debugging purposes present object in developer view
 		console.log(e[0]);
@@ -319,6 +329,9 @@ $(document).ready(function(){
 		}
 		// Boring sanity checks for parameters
 		try {
+			if(typeof(e.attr("inline"))!="undefined" && e.attr("inline")=="yes"){
+				$("#divout").click(editinline);
+			}
 			// rows
 			if(typeof(e.attr("num_rows"))=="undefined") throw "Element has no num_rows attribute";
 			num_rows=e.attr("num_rows");
