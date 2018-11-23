@@ -103,9 +103,16 @@ quad > quad{
 }
 
 quad > sym{
-	min-height: 24px;
+	min-height: 30px;
 }
 
 nbr {
 	display:inline-block;
+}
+
+
+sym {
+	height: 48px; 
+	overflow: hidden;
+	min-height: 30px;
 }

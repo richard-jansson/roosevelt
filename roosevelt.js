@@ -219,7 +219,7 @@ function __set_to_dom(e,set,ncol,lvl){
 			if(quad.length>3){
 				se.addClass("long");
 			}
-			se.html(quad);
+			se.html("$$"+quad+"$$");
 
 			qe.append(se);
 		}
@@ -238,6 +238,7 @@ function renderufo(e,set,ncol){
 	var dom=__set_to_dom(e,set,ncol,0);
 
 	e.append(dom);
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub])
 	return;
 }
 
