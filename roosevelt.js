@@ -177,7 +177,6 @@ function __set_to_dom(e,set,ncol,lvl){
 	var sw=24;
 	var w = set.length<ncol ? 100 / set.length : 100 / ncol;
 	var qmr=parseInt(e.quad_margin_right);
-	console.log(qmr);
 	for(var k in set){
 		var quad=set[k];
 		var qe=$("<quad></quad>",{style:"width:"+(w-qmr-1)+"%;margin-right:"+qmr+"%"});
@@ -191,6 +190,7 @@ function __set_to_dom(e,set,ncol,lvl){
 			lem.html(e.keys[k]);
 			qp.append(lem);
 
+			console.log("k"+k+":"+e.keys[k]);
 			qe.append(qp);
 		}
 
@@ -204,10 +204,13 @@ function __set_to_dom(e,set,ncol,lvl){
 			if(quad.n==undefined) throw "Must specify name";
 			if(quad.n.length>3){
 				se.addClass("long");
-				console.log("long");
 			}
 			se.html(quad.n);
 
+			qe.append(se);
+		}else if(quad==undefined){
+			// FIXME throw here?
+			var se=$("<sym></sym>",{class:"undefined"});
 			qe.append(se);
 		}else{
 			// leaf that is string only 
@@ -215,7 +218,6 @@ function __set_to_dom(e,set,ncol,lvl){
 			if(typeof(quad)=="undefined") continue;
 			if(quad.length>3){
 				se.addClass("long");
-				console.log("long");
 			}
 			se.html(quad);
 
