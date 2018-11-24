@@ -275,6 +275,46 @@ function syncmathjax(){
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 }
 
+function clickdeeper(tgt){
+	if(tgt[0].tagName=="QUAD") quad=tgt;
+	else tgt=tgt.parents("quad");
+
+	var depth=tgt.parents("quad").length;
+	console.log("d="+depth);
+
+	pars=tgt.parents("quad");
+	par=pars.eq(depth-1);
+	ind=par.index();
+	
+	console.log("i:"+ind);
+	// FIXME support several ufos 
+	select(ufos[0],ind);
+}
+
+function ufoclick(e){
+	var tgt=$(e.target);
+	if(tgt.parents("sym").length==0){
+		clickdeeper(tgt);
+		return;
+	}
+	par=tgt.parents("sym");
+	// check depth 
+	var depth=tgt.parents("quad").length;
+	if(depth==2){
+		quad=par.parent();	
+		tquad=quad.parent();
+		var ind=quad.index();
+		var tind=tquad.index();
+		// FIXME only support one ufo element
+		select(ufos[0],tind);
+		select(ufos[0],ind-1);
+	}else{
+		clickdeeper(tgt);	
+	}
+			 
+	console.log("ufoclick");
+}
+
 // called on javascript ready function
 // i.e. when dom is set up and all
 $(document).ready(function(){
@@ -303,6 +343,8 @@ $(document).ready(function(){
 		$(this).draggable();	
 		$(this).resizable();
 	});
+	
+	$("ufo").click(ufoclick);
 
 	$("ufo").each(function(){
 		// check that element is set up properly
