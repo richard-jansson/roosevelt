@@ -90,7 +90,7 @@ alphabets["math"] =
 	"\\begin{bmatrix}1&0\\\\1&0\\end{bmatrix}",
 	"\\begin{pmatrix}1&0\\\\1&0\\end{pmatrix}",
 	"\\begin{vmatrix}1&0\\\\1&0\\end{vmatrix}",
-	"\\det{\\begin{vmatrix}1&0\\\\1&0\\end{vmatrix}}","","",
+			  "\\det{\\begin{vmatrix}1&0\\\\1&0\\end{vmatrix}}","\\left\(","\\right)",
 	"\\vec{a}", "\\vec{b}", "\\vec{v}", "\\vec{g}"
 	
 	,"x_{y}","x_{0}","x_{1}","x_{2}",
