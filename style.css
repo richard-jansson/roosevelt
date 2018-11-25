@@ -40,6 +40,7 @@ sym.long {
 	font-size: 10px;
 }
 
+
 xs {
 }
 
@@ -72,7 +73,7 @@ sm { font-size: 10px; }
 
 .ufowrap { 
 	min-width: 640px;
-	min-height: 380px;
+	min-height: 560px;
 	width: 25%;
 	height: 25%;
 	opacity: 0.8;
@@ -115,4 +116,8 @@ sym {
 	height: 48px; 
 	overflow: hidden;
 	min-height: 30px;
+}
+sym.empty {
+	height: 15px;
+	min-height: 15px;
 }

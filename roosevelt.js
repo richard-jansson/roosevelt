@@ -25,6 +25,13 @@ function is_array(o){
 	return false;
 }
 
+function __empty_sym(){
+	var se=$("<sym></sym>",{class:"empty"});
+	se.html(".");
+
+	return se;
+}
+
 // handle symbol 
 function __sym_to_html(s){
 	var se=$("<sym></sym>");
@@ -40,7 +47,10 @@ function __sym_to_html(s){
 }
 
 function symo(key){
-	if(typeof(key)=="string"){
+	if(typeof(key)=="undefined"){
+		return {label:__empty_sym(key),output:key};
+	}
+	else if(typeof(key)=="string"){
 		return {label:__sym_to_html(key),output:key};
 	}else if(typeof(key)=="object" && key.c){
 		return {label:__sym_to_html(key.n),output:key.c};
@@ -229,8 +239,12 @@ function __set_to_dom(e,set,ncol,lvl){
 		var qe=qo.render();
 
 		// non leaf node  
-		if(is_array(quad)) __set_to_dom(qe,quad,ncol,lvl+1);
-		else qe.append(new symo(quad).label);
+		if(lvl<=1){
+			if(is_array(quad)) __set_to_dom(qe,quad,ncol,lvl+1);
+			else qe.append(new symo(quad).label);
+		}else{
+			qe.append(new symo().label);
+		}
 
 		e.append(qo.render());
 	}
@@ -279,14 +293,14 @@ function clickdeeper(tgt){
 	if(tgt[0].tagName=="QUAD") quad=tgt;
 	else tgt=tgt.parents("quad");
 
+	if(tgt.parents("quad").length==0) return;
+
 	var depth=tgt.parents("quad").length;
-	console.log("d="+depth);
 
 	pars=tgt.parents("quad");
 	par=pars.eq(depth-1);
 	ind=par.index();
 	
-	console.log("i:"+ind);
 	// FIXME support several ufos 
 	select(ufos[0],ind);
 }
@@ -312,7 +326,6 @@ function ufoclick(e){
 		clickdeeper(tgt);	
 	}
 			 
-	console.log("ufoclick");
 }
 
 // called on javascript ready function
@@ -357,8 +370,6 @@ $(document).ready(function(){
 		var quad_margin_right=4;
 		var inline=false;
 
-		// for debugging purposes present object in developer view
-		console.log(e[0]);
 		// styling
 		try {
 			if(typeof(e.attr("quad_margin_right"))!="undefined"){
