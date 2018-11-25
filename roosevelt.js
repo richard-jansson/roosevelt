@@ -20,6 +20,9 @@ var ufos=[];
 var sinks=[];
 var inline=false;
 
+var domcache=[];
+var domcache_root=false;
+
 function is_array(o){
 	if(typeof(o)=="object" && o.length!=undefined) return true;
 	return false;
@@ -90,14 +93,21 @@ function update(){
 }
 
 
-function updatequads(){
+function updatequads(path,dom){
 	var sym=$("ufo");
 	var math=sym[0];
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub,math])
+
+	MathJax.Hub.Queue(function(){
+		if(typeof(path)=="undefined") domcache_root=dom;
+		else domcache[path]=dom;
+		console.log("mathjax complete!");
+	});
 }
 
 function reset(e){
 	delete e.set;
+	delete e.path;
 	renderufo(e,e.original_alphabet,e.num_columns)
 }
 
@@ -212,6 +222,12 @@ function keyup(e){
 // select quad n on ufo enabled element e
 function select(e,n){
 	if(e.set==undefined) e.set=e.original_alphabet;
+
+	if(typeof(e.path)=="undefined") e.path=[n];
+	else e.path.push(n);
+
+	console.log("PATH:");
+	console.log(e.path);
 	
 	if(is_array(e.set[n])){
 		e.set=e.set[n];
@@ -257,12 +273,26 @@ function __set_to_dom(e,set,ncol,lvl){
 function renderufo(e,set,ncol){
 	// clear any previous content
 	e.html("");
-	
-	var dom=__set_to_dom(e,set,ncol,0);
+	var dom;
+
+	if(typeof(e.path)=="undefined" && domcache_root!=false) {
+		console.log("Cache hit");
+		dom=domcache_root;
+		e.append(dom);
+		return;
+	}
+	else if(e.path!=undefined && typeof(domcache[e.path])!="undefined"){
+		console.log("Cache hit");
+		dom=domcache[e.path];
+		e.append(dom);
+		return;
+	}else{
+		dom=__set_to_dom(e,set,ncol,0);
+	}
 
 	e.append(dom);
 	update();
-	updatequads();
+	updatequads(e.path,e.children());
 	return;
 }
 
