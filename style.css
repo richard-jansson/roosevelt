@@ -72,8 +72,8 @@ sm { font-size: 10px; }
 }
 
 .ufowrap { 
-	min-width: 640px;
-	min-height: 560px;
+	min-width: 800px;
+	min-height: 440px;
 	width: 25%;
 	height: 25%;
 	opacity: 0.8;
@@ -107,17 +107,25 @@ quad > sym{
 	min-height: 30px;
 }
 
+sym.empty {
+}
+
 nbr {
 	display:inline-block;
 }
 
 
 sym {
-	height: 48px; 
 	overflow: hidden;
 	min-height: 30px;
 }
 sym.empty {
-	height: 15px;
-	min-height: 15px;
+	min-height: 8px;
+	font-size: 6px;
+	line-height: 8px;
+	height: 8px;	
+}
+
+.MathJax_Display {
+	margin: 0.1em 0em;
 }
