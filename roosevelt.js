@@ -23,6 +23,8 @@ var inline=false;
 var domcache=[];
 var domcache_root=false;
 
+var locked=true;
+
 function is_array(o){
 	if(typeof(o)=="object" && o.length!=undefined) return true;
 	return false;
@@ -96,12 +98,15 @@ function update(){
 function updatequads(path,dom){
 	var sym=$("ufo");
 	var math=sym[0];
+
+	locked=true;
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub,math])
 
 	MathJax.Hub.Queue(function(){
 		if(typeof(path)=="undefined") domcache_root=dom;
 		else domcache[path]=dom;
 		console.log("mathjax complete!");
+		locked=false;
 	});
 }
 
@@ -336,6 +341,7 @@ function clickdeeper(tgt){
 }
 
 function ufoclick(e){
+	if(locked) return;
 	var tgt=$(e.target);
 	if(tgt.parents("sym").length==0){
 		clickdeeper(tgt);
@@ -361,6 +367,13 @@ function ufoclick(e){
 // called on javascript ready function
 // i.e. when dom is set up and all
 $(document).ready(function(){
+	MathJax.Hub.Config({
+		showProcessingMessages: false,
+		jax: ["input/TeX","output/HTML-CSS"],
+		"HTML-CSS": {
+			scale: 50
+		}
+	});
 	$(document).keypress(function(e){
 		if(!keyup(e)){
 			e.stopPropagation();
@@ -370,6 +383,7 @@ $(document).ready(function(){
 
 	// shift works differently for some reason??
 	$(document).keyup(function(e){
+		if(locked) return;
 		for(var i in ufos){
 			var ufo=ufos[i];
 
