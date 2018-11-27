@@ -97,6 +97,8 @@ function update(){
 
 function updatequads(path,dom){
 	var sym=$("ufo");
+	$("ufo").hide();
+	$(".loading").show();
 	var math=sym[0];
 
 	locked=true;
@@ -107,6 +109,8 @@ function updatequads(path,dom){
 		else domcache[path]=dom;
 		console.log("mathjax complete!");
 		locked=false;
+		$(".loading").hide();
+		$("ufo").show();
 	});
 }
 

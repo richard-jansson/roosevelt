@@ -129,3 +129,13 @@ sym.empty {
 .MathJax_Display {
 	margin: 0.1em 0em;
 }
+
+.loading {
+	width: 100%;
+	text-align: center;
+}
+
+.loading img{
+	opacity: 0.5;
+	margin-top: 20%;
+}
