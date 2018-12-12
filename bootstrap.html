@@ -48,7 +48,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<body>
 		<div class="navbar navbar-dark bg-dark">
 			<img src="logo.png" alt="Erudite Now!" />
-			<button id="invert_btn" type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">Invert</button>
+			<div>
+				<button id="image_btn" type="button" class="btn btn-secondary" data-toggle="button" aria-pressed="false" autocomplete="off">To image</button>
+<!--				<button id="invert_btn" type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">Invert</button> -->
+			</div>
 		</div>
 
 		<!-- 
@@ -60,14 +63,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		-->
 		<div class="container">
 			<div id="editor" class="row editor dark">
-				<div class="col-md-6"><div id="divout"></div></div>
-				<div class="col-md-6"><textarea id="code" ufodest></textarea></div>
+				<div class="col-md-6"><div id="divout"></div> </div>
+				<div class="col-md-6">
+				<textarea id="code" ufodest></textarea>
+				<div id="output"></div>
+				</div>
 			<div>
 			<div class="row explanation">
 				<div class="col-md-12"><h1>Roosevelt Experimental TeX editor</h1></div>
 			</div>
 			<div class="row explanation">
-				<div class="col-md-6">
+				<div class="col-md-3">
 				<h2>Keybindings</h2>
 				<p>
 				<b>Q, W, E &amp; R</b><br/>
@@ -81,7 +87,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				<b>` / §</b></br>
 				Toggle visibility</br>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-3">
 					<p>Let's say that you enter the following keys:</p>
 					<p>
 						<b>Q + R</b> ⇒ 4<br/>
@@ -91,6 +97,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 						<b>Q + Q</b> ⇒ 0<br/>
 						<b>A + V</b> ⇒ ⏎<br/>
 					</p>
+				</div>
+				<div class="col-md-6">
+					<p>As the old adage goes a youtube video says more than a thousand words.</p>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/qLRXs55MpOA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 				</div>
 			</div>
 			<div class="row bottom">
@@ -108,8 +118,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				console.log("botostrap stuff ready");
 				$("#invert_btn").click(function(){
 					$(".editor").toggleClass("dark");
-//					console.log("Darkness to light");
-//					$(this).button("toggle");
+				});
+				$("#image_btn").click(function(){
+					if($("#divout").find("svg").length==0){
+						alert("Enable the svg renderer");
+						return;
+					}
+					var href="data:image/svg;base64,"+btoa($("#divout").find("svg").parent()[0].innerHTML);
+					console.log(href);
+					var img=$("<img />",{href:href});
+//					img=$("#divout").find("svg").clone();
+					$("body").append(img);
+					img.draggable();
+					img.resizable();
 				});
 			});
 		</script>

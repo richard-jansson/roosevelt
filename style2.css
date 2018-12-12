@@ -2,7 +2,7 @@ body {
 	background-color: #aaa;
 		  }
 
-textarea,#divout {
+textarea,#divout,#output {
 	background-color: #fafafa;
 	border-color: #e6e65c;
 	box-shadow: #e6e65c 2px 2px 5px;
@@ -105,8 +105,8 @@ sm { font-size: 10px; }
 }
 
 .ufowrap { 
-	min-width: 800px;
-	min-height: 460px; 
+	min-width: 900px;
+	min-height: 580px; 
 	width: 25%;
 	height: 25%;
 	opacity: 0.8;
@@ -133,12 +133,12 @@ div#divout {
 
 quad > quad{
 	border: 0;
-	height: 32px;
+	height: 35px;
 	overflow: hidden;
 }
 
 quad > sym{
-	min-height: 55px;
+	min-height: 60px;
 	position: relative;
 	top: -10px;
 }
