@@ -201,9 +201,19 @@ function keyup(e){
 	for(var i in ufos){
 		var ufo=ufos[i];
 
-		if(e.key==ufo.hide){
-			hide(ufo);
-			propagate=false;
+		// FIXME rst also should handle multiple keybindings
+		if(typeof(ufo.hide)=="object"){
+			for(var k in ufo.hide){
+				if(ufo.hide[k] == e.key){
+					hide(ufo);
+					propagate=false;
+				}
+			}
+		}else{
+			if(e.key==ufo.hide){
+				hide(ufo);
+				propagate=false;
+			}
 		}
 
 		if(ufo.hidden===true) continue;
@@ -248,6 +258,12 @@ function select(e,n){
 	}
 }
 
+
+function ufobar(){
+	var c=$("<ufobar>&nbsp;</ufobar>");
+	return c;
+}
+
 // Recurse over the current set and return a DOM element to be rendered by web engine 
 function __set_to_dom(e,set,ncol,lvl){
 	var w = set.length<ncol ? 100 / set.length : 100 / ncol;
@@ -282,6 +298,9 @@ function __set_to_dom(e,set,ncol,lvl){
 function renderufo(e,set,ncol){
 	// clear any previous content in ufo element
 	e.html("");
+
+	e.append(ufobar());
+
 	// the element tree that we'll insert into the active DOM tree
 	var dom;
 
@@ -320,8 +339,15 @@ function bindufokeys(el,keys,rst,hide){
 		el.bindings[key]=k;
 	}
 	
+	// check if rst is given as json object 
+	try {
+		var t=JSON.parse(hide);
+		el.hide=t;
+	} catch{
+		el.hide=hide;
+	}
+
 	el.rst=rst;
-	el.hide=hide;
 }
 
 function syncmathjax(){
@@ -384,6 +410,13 @@ $(document).ready(function(){
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub])
 	})
 
+	var ta=$("textarea");
+	var start="\\int_{0}^{2π}\sin^2(x)dx=0\\\\\r";
+	ta.html(start);
+	out=$("#divout")
+	out.html("$$"+start+"$$")
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub])
+						
 
 	$(document).keypress(function(e){
 		if(!keyup(e)){

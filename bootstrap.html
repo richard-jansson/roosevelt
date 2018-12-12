@@ -49,14 +49,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	<body>
 		<div class="navbar navbar-dark bg-dark">
 			<img src="logo.png" alt="Erudite Now!" />
-			<div class="btn-group btn-group-toggle" data-toggle="buttons">
-				  <label class="btn btn-secondary active">
-			      <input type="radio" name="options" id="option2" autocomplete="off"> Dark
-				  </label>
-			    <label class="btn btn-secondary">
-				     <input type="radio" name="options" id="option3" autocomplete="off"> Light
-			    </label>
-			</div>
+			<button id="invert_btn" type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">Invert</button>
 		</div>
 
 		<!-- 
@@ -67,7 +60,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				- num_colums 	= an integer representing the number of columns
 		-->
 		<div class="container">
-			<div id="editor" class="row editor">
+			<div id="editor" class="row editor dark">
 				<div class="col-md-6"><div id="divout"></div></div>
 				<div class="col-md-6"><textarea id="code" ufodest></textarea></div>
 			<div>
@@ -89,16 +82,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 				<b>` / §</b></br>
 				Toggle visibility</br>
 				</div>
+				<div class="col-md-6">
+					<p>Let's say that you enter the following keys:</p>
+					<p>
+						<b>Q + R</b> ⇒ 4<br/>
+						<b>W + S</b> ⇒ π<br/>
+						<b>A + Q</b> ⇒ x<sup>2</sup><br/>
+						<b>E + D</b> ⇒ =<br/>
+						<b>Q + Q</b> ⇒ 0<br/>
+						<b>A + V</b> ⇒ ⏎<br/>
+					</p>
+				</div>
 			</div>
 			<div class="row bottom">
 			</div>
 			<div class="ufowrap ui-widget-content">
 				<div class="loading"><img src="npcthink.gif" /></div>
-				<ufo alphabet="math" num_columns="4" num_rows="3" bind_select_quad='["q","w","e","r", "a","s","d","f", "z","x","c","v"]' bind_reset="Shift" bind_hide="`" quad_margin_right="1" inline="no"></ufo> 
+				<ufo alphabet="math" num_columns="4" num_rows="3" bind_select_quad='["q","w","e","r", "a","s","d","f", "z","x","c","v"]' bind_reset="Shift" bind_hide='["`","§"]' quad_margin_right="1" inline="no"></ufo> 
 			</div>
 		</div>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+		<script type="text/javascript"> 
+			$(document).ready(function(){
+				console.log("botostrap stuff ready");
+				$("#invert_btn").click(function(){
+					$(".editor").toggleClass("dark");
+//					console.log("Darkness to light");
+//					$(this).button("toggle");
+				});
+			});
+		</script>
 	</body>
 </html>
