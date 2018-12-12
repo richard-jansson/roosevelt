@@ -59,7 +59,7 @@ alphabets["math"] =
 	"\\lim_{x \\to y}",
 	"\\to",
 	"\\infty",
-	{n:"⏎",c:"\\\\"},
+	{n:"⏎",c:"\\\\\r"},
 
 	"\\sin(x)",
 	"\\cos(x)",
