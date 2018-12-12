@@ -371,13 +371,6 @@ function ufoclick(e){
 // called on javascript ready function
 // i.e. when dom is set up and all
 $(document).ready(function(){
-	MathJax.Hub.Config({
-		showProcessingMessages: false,
-		jax: ["input/TeX","output/HTML-CSS"],
-		"HTML-CSS": {
-			scale: 50
-		}
-	});
 	$(document).keypress(function(e){
 		if(!keyup(e)){
 			e.stopPropagation();

@@ -73,7 +73,7 @@ sm { font-size: 10px; }
 
 .ufowrap { 
 	min-width: 800px;
-	min-height: 440px;
+	min-height: 680px;
 	width: 25%;
 	height: 25%;
 	opacity: 0.8;
@@ -97,6 +97,8 @@ div#divout {
 	border: 1px solid #aaa;
 	margin: 4%;
 	width:84%;
+	height: 10%;
+	float: left;
 }
 
 quad > quad{
@@ -104,7 +106,7 @@ quad > quad{
 }
 
 quad > sym{
-	min-height: 30px;
+	min-height: 55px;
 }
 
 sym.empty {
