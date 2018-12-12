@@ -280,11 +280,13 @@ function __set_to_dom(e,set,ncol,lvl){
 // e - jQuery object representing DOM element
 // s - set i.e.   
 function renderufo(e,set,ncol){
-	// clear any previous content
+	// clear any previous content in ufo element
 	e.html("");
+	// the element tree that we'll insert into the active DOM tree
 	var dom;
 
 	if(typeof(e.path)=="undefined" && domcache_root!=false) {
+		// The rendering have been made already, so we'll just serve it from our cache
 		console.log("Cache hit");
 		dom=domcache_root;
 		e.append(dom);
@@ -296,11 +298,14 @@ function renderufo(e,set,ncol){
 		e.append(dom);
 		return;
 	}else{
+		// Get the dom tree as translated from our internal representation 
 		dom=__set_to_dom(e,set,ncol,0);
 	}
-
+	// insert the dom either from cache or freshly genereated
 	e.append(dom);
 	update();
+	// Ask MathJax to render the symbols in the keyboard into nice looking representation
+	// also once the rendering is done store it within the cache for future use 
 	updatequads(e.path,e.children());
 	return;
 }
@@ -369,8 +374,17 @@ function ufoclick(e){
 }
 
 // called on javascript ready function
-// i.e. when dom is set up and all
+// i.e. whe dom is set upeand all
 $(document).ready(function(){
+	// standard editing should also trigger redrawing of glyphs
+	$("textarea").bind("input propertychange",function(e){
+		out=$("#divout")
+		console.log(e)
+		out.html("$$"+e.target.value+"$$")
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub])
+	})
+
+
 	$(document).keypress(function(e){
 		if(!keyup(e)){
 			e.stopPropagation();
